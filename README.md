@@ -23,7 +23,7 @@ Add on composer.json (see http://getcomposer.org/)
 
 To start using the bundle, register it in your Kernel:
 
-``php
+''php
 <?php
 // app/AppKernel.php
 
@@ -34,14 +34,14 @@ public function registerBundles()
         new Hof\PlexExportBundle\HofPlexExportBundle(),
     );
     // ...
-``
+''
 
 ## Step 3) (optional) Configure the bundle
 
 The bundle comes with a sensible default configuration, which is listed below.
 If you skip this step, these defaults will be used.
 
-``yaml
+''yaml
 # app/config/config.yml
 hof_plex_export:
     config:
@@ -53,15 +53,15 @@ hof_plex_export:
       sections: "all"
       sort_skip_words: "a,the,der,die,das"
     template: "HofPlexExportBundle:PlexExport:plex_movies.html.twig"
-``
+''
 # Render your view
 
-``jinja
+''jinja
 {{ plex_export() }}
-``
+''
 
 If you want to add options or change your template, you can do something like this:
 
-``jinja
+''jinja
 {{ plex_export("HofWebsiteBundle:Movies:plex_movies.html.twig",{"stylesheets":false}) }}
-``
+''
