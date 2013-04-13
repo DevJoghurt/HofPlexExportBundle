@@ -18,9 +18,9 @@
         "symfony/framework-bundle": ">=2.1,<2.3-dev"
     },
     "autoload":     {
-        "psr-0": { "Hof\\Bundle\\PlexExportBundle": "" }
+        "psr-0": { "Hof\\PlexExportBundle": "" }
     },
-    "target-dir": "Hof/Bundle/PlexExportBundle",
+    "target-dir": "Hof/PlexExportBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
