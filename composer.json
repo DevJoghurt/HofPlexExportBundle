@@ -1,0 +1,30 @@
+{
+    "name":         "devjoghurt/hof-plexexport-bundle",
+    "description":  "This bundle provides an exporter for your Plex media library.",
+    "keywords":     ["plex"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":     "HofStation",
+            "homepage": "http://hofstation.com"
+        },
+        {
+            "name":     "Johannes Hof",
+            "email":    "jh@hofstation.com"
+        }
+    ],
+    "require":      {
+        "symfony/framework-bundle": ">=2.1,<2.3-dev"
+    },
+    "autoload":     {
+        "psr-0": { "Hof\\Bundle\\PlexExportBundle": "" }
+    },
+    "target-dir": "Hof/Bundle/PlexExportBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

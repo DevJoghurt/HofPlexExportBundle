@@ -1,0 +1,13 @@
+parameters:
+    hof.plex.exporter.class: Hof\PlexExportBundle\Exporter\PlexExporter
+    hof.plex.twig.class: Hof\PlexExportBundle\Twig\PlexExportExtension
+
+services:
+    hof.plex.exporter:
+        class: %hof.plex.exporter.class%
+        arguments: [%hof.plex.export.config%]
+    hof.plex.twig.extension:
+        class: %hof.plex.twig.class%
+        arguments: ["@service_container",%hof.plex.export.template%]
+        tags:
+            - { name: twig.extension }
