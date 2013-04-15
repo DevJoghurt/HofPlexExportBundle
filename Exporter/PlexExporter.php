@@ -544,17 +544,21 @@ class PlexExporter {
         $filename = '/thumb_' . $key . '.jpeg';
         $save_filename = $this->options['absolute_data_dir'] . $filename;
         $return_filename = $this->options['img_path'] . $filename;
+        $source_url = $this->options['plex_url'] . substr($thumb_url, 1); # e.g. http://local:32400/library/metadata/123/thumb?=date
+        $transcode_url = $this->options['plex_url'] . 'photo/:/transcode?width=' . $this->options['thumbnail_width'] . '&height=' . $this->options['thumbnail_height'] . '&url=' . urlencode($source_url);
 
-        if (file_exists($save_filename))
-            return $return_filename;
+        if (file_exists($save_filename)){
+            $local_size = filesize($save_filename);
+            $remote_size = $this->remote_file_size($transcode_url);
+            if ($local_size === $remote_size) {
+                return $return_filename;
+            }
+        }
 
         if ($thumb_url == '') {
             $this->plex_error('No thumbnail URL was provided for ' . $title, ', skipping');
             return false;
         }
-
-        $source_url = $this->options['plex_url'] . substr($thumb_url, 1); # e.g. http://local:32400/library/metadata/123/thumb?=date
-        $transcode_url = $this->options['plex_url'] . 'photo/:/transcode?width=' . $this->options['thumbnail_width'] . '&height=' . $this->options['thumbnail_height'] . '&url=' . urlencode($source_url);
 
         $img_data = @file_get_contents($transcode_url);
         if (!$img_data) {
@@ -573,6 +577,30 @@ class PlexExporter {
 
     // end func: generate_item_thumbnail
 
+    protected function remote_file_size($url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); //not necessary unless the file redirects (like the PHP example we're using here)
+        $data = curl_exec($ch);
+        curl_close($ch);
+        if ($data === false) {
+            $this->reporting->addMessage('error', 'Curl failed in image download process');
+            exit;
+        }
+
+        $contentLength = 'unknown';
+        $status = 'unknown';
+        if (preg_match('/^HTTP\/1\.[01] (\d\d\d)/', $data, $matches)) {
+            $status = (int) $matches[1];
+        }
+        if (preg_match('/Content-Length: (\d+)/', $data, $matches)) {
+            $contentLength = (int) $matches[1];
+        }
+        return $contentLength;
+    }
+    
     /**
      * Output a message to STDOUT
      * */
